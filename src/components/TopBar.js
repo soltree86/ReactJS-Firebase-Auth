@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useContext } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { 
@@ -9,8 +9,10 @@ import {
 import { 
   ExitToApp as ExitToAppIcon
 } from '@material-ui/icons';
-
 import logo from '../logo.svg';
+
+import { UserContext } from '../Context';
+
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -26,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 const TopBar = () => {
   const classes = useStyles();
+  const {user, logout} = useContext(UserContext);
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -35,6 +38,7 @@ const TopBar = () => {
         </div>
         <div className={classes.grow} />
         <Button
+          onClick={logout}
           aria-label="log out current user"
           aria-controls="primary-toolbar-logout"
           color="inherit"

@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../src/utils/theme';
 
-import { UserContext, getUserLocalStorage, setUserLocalStorage } from './Context';
+import { UserContext, getUserLocalStorage, setUserLocalStorage, clearLocalStorage } from './Context';
 
 import MainPage from './pages/Main'
 import SignInPage from '../src/pages/SignIn'
@@ -22,8 +22,8 @@ const App = () => {
   }
 
   const logout = () => {
-    setUserLocalStorage({});
-    setUser(getUserLocalStorage());
+    clearLocalStorage();
+    setUser(undefined);
   }
 
   return(

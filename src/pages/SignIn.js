@@ -5,16 +5,40 @@ import {
 } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
+import { 
+  Avatar, 
+  Button, 
+  Box, 
+  Container, 
+  Checkbox, 
+  FormControlLabel, 
+  Grid, 
+  Link, 
+  TextField, 
+  Typography,
+  CircularProgress 
+} from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import { UserContext } from '../Context';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
   buttonProgress: {
     color: theme.palette.secondary.main,
@@ -28,10 +52,9 @@ const SignIn = () => {
   let history = useHistory();
   let location = useLocation();
   let { from } = location.state || { from: { pathname: "/" } };
+  const { register, handleSubmit } = useForm();
 
   const { user, login } = useContext(UserContext);
-  const { username, setUserName } = useState('');
-  const { password, setPassword } = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(()=> {
@@ -43,46 +66,72 @@ const SignIn = () => {
   const onSubmit = async data => {
     setLoading(true);
     // NOTE request to api login here instead of this fake promise
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    login({ user: { username: username, password: password } });
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    login({ email: data.email, password: data.password });
     setLoading(false);
     history.replace(from);
   };
   
   return(
-    <>
-      <Container maxWidth="sm">
-          <Typography variant="h4">Login</Typography>
-          <form className={classes.root} noValidate>
-              <TextField 
-                type="text" 
-                label="USERNAME" 
-                variant="outlined"
-                margin="normal" 
-                disabled={loading} 
-                name="username" 
-                value={username} 
-              />
-
-              <TextField 
-                type="password" 
-                label="PASSWORD" 
-                variant="outlined" 
-                fullWidth 
-                margin="normal" 
-                disabled={loading} 
-                name="password" 
-                value={password} 
-              />
-
-              <Button variant="contained"
-                color="secondary" 
-                disabled={loading}>
-                { loading ? <CircularProgress size={24} className={classes.buttonProgress} /> : 'Login' } 
-              </Button>
-          </form>
-      </Container>
-    </>
+    <Container component="main" maxWidth="sm">
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus 
+            disabled={loading}
+            inputRef={register}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password" 
+            disabled={loading}
+            inputRef={register}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            { loading ? <CircularProgress size={24} className={classes.buttonProgress} /> : 'Login' } 
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    </Container>
   )
 }
 

@@ -5,6 +5,10 @@ export const setUserLocalStorage = (user) => {
   localStorage.setItem('user', user);
 };
 
+export const clearLocalStorage = () => {
+  localStorage.clear();
+}
+
 export const getUserLocalStorage = () => {
   return localStorage.getItem('user');
 };
