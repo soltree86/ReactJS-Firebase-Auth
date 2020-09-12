@@ -7,7 +7,8 @@ import {
   Button,
 } from '@material-ui/core';
 import { 
-  ExitToApp as ExitToAppIcon
+  ExitToApp as ExitToAppIcon,
+  AccountCircle as AccountCircleIcon
 } from '@material-ui/icons';
 import logo from '../logo.svg';
 
@@ -28,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 const TopBar = () => {
   const classes = useStyles();
-  const {user, logout} = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -37,6 +38,8 @@ const TopBar = () => {
           <img src={logo} alt="logo" className={classes.logo} />
         </div>
         <div className={classes.grow} />
+        <AccountCircleIcon />
+        { user.email }
         <Button
           onClick={logout}
           aria-label="log out current user"

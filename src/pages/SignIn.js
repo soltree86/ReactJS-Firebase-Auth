@@ -8,10 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { 
   Avatar, 
   Button, 
-  Box, 
-  Container, 
-  Checkbox, 
-  FormControlLabel, 
+  Container,
   Grid, 
   Link, 
   TextField, 
@@ -52,7 +49,7 @@ const SignIn = () => {
   let history = useHistory();
   let location = useLocation();
   let { from } = location.state || { from: { pathname: "/" } };
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
 
   const { user, login } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
@@ -93,7 +90,16 @@ const SignIn = () => {
             autoComplete="email"
             autoFocus 
             disabled={loading}
-            inputRef={register}
+            inputRef={
+              register({ 
+                required: true,
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "invalid email address"
+                } 
+              })}
+            helperText={errors.email ? errors.email.message : ''}
+            error={!!errors.email}
           />
           <TextField
             variant="outlined"
@@ -106,7 +112,9 @@ const SignIn = () => {
             id="password"
             autoComplete="current-password" 
             disabled={loading}
-            inputRef={register}
+            inputRef={register({ required: true })}
+            error={!!errors.password}
+            helperText={errors.password ? errors.password.message : ''}
           />
           <Button
             type="submit"
